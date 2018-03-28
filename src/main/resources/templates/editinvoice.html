@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css"
+	th:href="@{../css/bootstrap.min.css}" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Edit invoice</title>
+</head>
+<body>
+
+	<h1>Edit invoice</h1>
+
+
+	<form class="form-horizontal" th:object="${invoice}"
+		th:action="@{../save}" action="#" method="post">
+
+		<input type="hidden" th:field="*{id}" />
+
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="name">Name of
+				recipient</label> <input type="text" id="name" th:field="*{name}" />
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="accountno">Account
+				number</label> <input type="text" id="accountno" th:field="*{accountno}" />
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="referenceno">Reference
+				number</label> <input type="text" id="referenceno" th:field="*{referenceno}" />
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="duedate">Due date</label>
+			<input type="date" id="duedate" th:field="*{duedate}" />
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="amount">Amount</label> <input
+				type="text" id="amount" th:field="*{amount}" />
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="catlist">Payment
+				status</label> <select id="catlist" th:field="*{payment}"
+				class="form-horizontal">
+				<option th:each="payment: ${payments}"
+					th:value="${payment.paymentid}" th:text="${payment.name}"></option>
+			</select>
+		</div>
+
+		<input type="submit" value="Save"></input>
+
+	</form>
+
+</body>
+</html>

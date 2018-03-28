@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<style>
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono');
+</style>
+<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css"
+	th:href="@{css/bootstrap.min.css}" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>View invoices</title>
+</head>
+<body>
+
+	<div class="col-md-4">
+		<h1>View invoices</h1>
+	</div>
+	<div class="col-md-4">
+		<h3 th:inline="text">Welcome,
+			[[${#httpServletRequest.remoteUser}]]</h3>
+	</div>
+	<div class="col-md-4" style="padding: 20px 0">
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Sign Out" class="btn btn-danger" />
+		</form>
+	</div>
+
+
+	<table class="table table-hover">
+		<tr>
+			<th>Name of recipient</th>
+			<th>Account number</th>
+			<th>Reference number</th>
+			<th class="danger">Due date</th>
+			<th>Amount (€)</th>
+			<th>Payment status</th>
+			<th sec:authorize="hasRole('ADMIN')"></th>
+			<th sec:authorize="hasRole('ADMIN')"></th>
+			<th></th>
+			<th></th>
+		</tr>
+		<tr th:each="invoice : ${invoices}">
+			<td th:text="${invoice.name}"></td>
+			<td th:text="${invoice.accountno}"></td>
+			<td th:text="${invoice.referenceno}"></td>
+			<td th:text="${invoice.duedate}"></td>
+			<td th:text="${invoice.amount}"></td>
+			<td th:text="${invoice.payment.name}"></td>
+			<td sec:authorize="hasAuthority('ADMIN')"><a
+				th:href="@{/delete/{id}(id=${invoice.id})}" class="btn btn-danger">Delete</a></td>
+			<td sec:authorize="hasAuthority('ADMIN')"><a
+				th:href="@{/edit/{id}(id=${invoice.id})}" class="btn btn-info">Edit</a></td>
+			<td class="danger" th:if="${#dates.format(invoice.duedate, 'yyyy MMM dd')} &lt; ${#dates.format(#dates.createNow(), 'yyy MMM dd')} and ${invoice.payment.name} == 'Unpaid'" th:text="'Past due date!'" ></td>
+		</tr>
+	</table>
+	<a sec:authorize="hasAuthority('ADMIN')" href="/add"
+		class="btn btn-success">Add Invoice</a>
+</body>
+</html>
